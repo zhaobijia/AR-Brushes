@@ -12,8 +12,9 @@ public class Draw : MonoBehaviour
     [SerializeField] Camera arCam;
     [SerializeField] GameObject lineRendererPrefab;
     [SerializeField] ARAnchorManager anchorManager;
+    [SerializeField] BrushSetting brushSetting;
 
-    LineRenderer line;
+    public LineRenderer line;
     HashSet<Vector3> points = new HashSet<Vector3>();
     private void Update()
     {
@@ -77,9 +78,14 @@ public class Draw : MonoBehaviour
 
     void InitializeLineRenderer(Vector3 pos)
     {
-        GameObject lineGO = Instantiate(lineRendererPrefab, pos,Quaternion.identity);
+        GameObject lineGO = new GameObject($"Line");
+       // GameObject lineGO= Instantiate(lineRendererPrefab, pos,Quaternion.identity);
+        lineGO.transform.position = pos;
 
-        line = lineGO.GetComponent<LineRenderer>();
+        lineGO.AddComponent<ARAnchor>();
+        line = lineGO.AddComponent<LineRenderer>();
+        brushSetting.DefaultLineSetting(line);
+
         line.SetPosition(0, pos);
         line.SetPosition(1, pos);
         points.Add(pos);
