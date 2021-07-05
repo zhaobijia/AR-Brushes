@@ -68,6 +68,8 @@ public class BrushSetting : MonoBehaviour
 
     }
 
+    
+
     #region Spawn Distance from Camera
     private void ChangeDrawDistance()
     {
@@ -85,7 +87,8 @@ public class BrushSetting : MonoBehaviour
     {
         float sliderValue = brushSizeSlider.value;
         float size = minSize + (maxSize - minSize) * sliderValue;
-        
+        defaultStartWidth = size;
+        defaultEndWidth = size;
 
     }
     #endregion
