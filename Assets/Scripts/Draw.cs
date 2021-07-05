@@ -16,6 +16,9 @@ public class Draw : MonoBehaviour
 
     public LineRenderer line;
     HashSet<Vector3> points = new HashSet<Vector3>();
+
+    //For Undo Function
+    Stack<LineRenderer> lineStack = new Stack<LineRenderer>();
     private void Update()
     {
 #if UNITY_EDITOR
@@ -84,6 +87,9 @@ public class Draw : MonoBehaviour
 
         lineGO.AddComponent<ARAnchor>();
         line = lineGO.AddComponent<LineRenderer>();
+        lineStack.Push(line);
+
+
         brushSetting.DefaultLineSetting(line);
 
         line.SetPosition(0, pos);
@@ -101,17 +107,22 @@ public class Draw : MonoBehaviour
         return EventSystem.current.IsPointerOverGameObject();
     }
 
-  
-
-    #region Brush Settings
-    public void SetBrushSize(float size)
+    public void UndoDrawing()
     {
-
+        if (lineStack.Count > 0)
+        {
+            LineRenderer lineToDelete = lineStack.Peek();
+            lineStack.Pop();
+            Destroy(lineToDelete.gameObject);
+        }
     }
 
     public void SetDistanceFromCamera(float dist)
     {
         distanceFromCamera = dist;
     }
-    #endregion
+
+
+
+
 }
