@@ -14,23 +14,16 @@ Shader "UI/ColorPicker"
             Tags
             {
                 "Queue" = "Geometry"
-               // "IgnoreProjector" = "True"
-              //  "RenderType" = "Transparent"
-              //  "PreviewType" = "Plane"
-              //  "CanUseSpriteAtlas" = "True"
+               
             }
-           
-
-          //  Cull Off
+     
             Lighting Off
             ZWrite Off
-          //  ZTest[unity_GUIZTestMode]
-          //  Blend SrcAlpha OneMinusSrcAlpha
-          //  ColorMask[_ColorMask]
+          
 
             Pass
             {
-                Name "Default"
+                Name "ColorPicker"
             CGPROGRAM
                 #pragma vertex vert
                 #pragma fragment frag

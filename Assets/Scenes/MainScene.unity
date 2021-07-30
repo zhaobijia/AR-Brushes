@@ -2274,7 +2274,7 @@ GameObject:
   - component: {fileID: 1732177963}
   - component: {fileID: 1732177965}
   m_Layer: 5
-  m_Name: ColorPickerTest
+  m_Name: ColorPicker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2350,6 +2350,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   colorPickerMaterial: {fileID: 2100000, guid: 73100ca5fb9f8cc4da535e569a6aae3c, type: 2}
+  pickedColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!1 &1760473028
 GameObject:
   m_ObjectHideFlags: 0
