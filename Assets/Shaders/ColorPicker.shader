@@ -61,6 +61,9 @@ Shader "UI/ColorPicker"
                 float4 _ClipRect;
                 float4 _MainTex_ST;
 
+                float2 _SVMousePos;
+                float2 _HueMousePos;
+
 
 
                 VertexOutput vert(VertexInput v)
@@ -96,49 +99,60 @@ Shader "UI/ColorPicker"
                 }
 
                 //hue
-                float3 hue(VertexOutput IN) {
-                    float r = max(0,min(0.5, (1 - abs(IN.uv.y * 3 - 3))) * 2)+ max(0,min(0.5, (1 - abs(IN.uv.y * 3))) * 2);//
-                    float g =max(0,min(0.5, (1-abs(IN.uv.y * 3-1)))*2);
-                    float b = max(0, min(0.5, (1 - abs(IN.uv.y * 3 - 2))) * 2);;// (1 - max(0.5, abs(IN.uv.y * 3 - 2))) * 2;
+                float3 hue(float2 uv) {
+                    float r = max(0,min(0.5, (1 - abs(uv.y * 3 - 3))) * 2)+ max(0,min(0.5, (1 - abs(uv.y * 3))) * 2);//
+                    float g =max(0,min(0.5, (1-abs(uv.y * 3-1)))*2);
+                    float b = max(0, min(0.5, (1 - abs(uv.y * 3 - 2))) * 2);;// (1 - max(0.5, abs(IN.uv.y * 3 - 2))) * 2;
                     return float3(r, g, b);
                 }
                 //sv
-                float3 saturation_value_squre(VertexOutput IN, float hue) {
-                    
-                    float s = IN.uv.x;
-                    float v = IN.uv.y;
+                float3 saturation_value_squre(float2 uv, float hue) {                    
+                    float s = uv.x/0.85;
+                    float v = uv.y;
                     float3 color = hsv2rgb(float3(hue, s, v));
                     return color;
                 }
                 //selecting hue
-                float3 selector_hue(VertexOutput IN,float2 pos) {
+                float selector_hue(float2 uv,float2 pos) {
                     float radius = 0.02;
-                    float circle = distance(IN.uv, pos) < radius;
+                    float circle = distance(uv, pos) < radius;
                     return circle;
                 }
 
                 //selecting sv
-                float3 selector_sv(VertexOutput IN, float2 pos) {
+                float selector_sv(float2 uv, float2 pos) {
                     float radiusInner = 0.02;
                     float radiusOuter = 0.03;
-                    float ring = (distance(IN.uv, pos) > radiusInner) && (distance(IN.uv, pos) < radiusOuter);
+                    float ring = (distance(uv, pos) > radiusInner) && (distance(uv, pos) < radiusOuter);
                     return ring;
                 }
                 
                 fixed4 frag(VertexOutput IN) : SV_Target
                 {
-                   
+                    float2 huemouse =_HueMousePos;
+                    float2 svmouse = _SVMousePos;
 
-                    float3 h = hue(IN);
-                    float3 sv = saturation_value_squre(IN,float3(1,1,1));
 
-                    float right = step( 0.9, IN.uv.x);
-                    float left = step(IN.uv.x, 0.8);
+                    float hueX = step(0.9, IN.uv.x);
+                    float svX = step(IN.uv.x, 0.85);
+
+                    float2 hueArea = float2(hueX,IN.uv.y);
+                    float2 svArea = float2(svX,IN.uv.y);
+
+                    float3 huebar = hue(IN.uv);
+
+                    float h =  huemouse.y;
+                    
+                    float selectorHue = selector_hue(IN.uv, float2(0.87, h));
+                    
+                    float selectorSV = selector_sv(IN.uv, float2(svmouse.x, svmouse.y));
                     
 
-                    float selectorHue = selector_hue( IN, float2(0.87,0.5));
-                    float selectorSV = selector_sv(IN, float2(0.5, 0.5));
-                    float4 color = right * float4(h, 1) + left*float4(sv,1) + selectorHue + selectorSV;
+                    float3 sv = saturation_value_squre(IN.uv,h);
+                    
+                    
+
+                    float4 color = hueArea.x * float4(huebar, 1) + svArea.x * float4(sv, 1) +selectorHue + selectorSV;
 
                     return color;
                 }
