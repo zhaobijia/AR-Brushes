@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.Events;
 
 
 public class ColorPicker : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUpHandler
@@ -13,13 +14,16 @@ public class ColorPicker : MonoBehaviour, IPointerDownHandler, IDragHandler, IPo
     private Material colorPickerMaterial;
 
 
-    public Color pickedColor;
+    public Color pickedColor = Color.white;
     private float hue;
     private float saturation;
     private float value;
 
     //mouse position, pass this to shader
     Vector2 mousePos;
+
+
+    [HideInInspector]public UnityEvent onColorChanged;
     private void Awake()
     {
         UIimage = GetComponent<Image>();
@@ -29,6 +33,7 @@ public class ColorPicker : MonoBehaviour, IPointerDownHandler, IDragHandler, IPo
      
     }
 
+    
     
 
     private Vector2 GetPickerPos(Vector2 position)
@@ -81,6 +86,7 @@ public class ColorPicker : MonoBehaviour, IPointerDownHandler, IDragHandler, IPo
             hue = mousePos.y;
             pickedColor = GetColorFromMousePos();
         }
+        onColorChanged.Invoke();
     }
 
 

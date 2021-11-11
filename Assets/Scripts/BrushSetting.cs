@@ -36,6 +36,10 @@ public class BrushSetting : MonoBehaviour
     [SerializeField] float minSize = 0.01f;
     [SerializeField] float maxSize = 1f;
 
+    [SerializeField] Image currentColorIndicator;
+    [SerializeField] Image colorPickerImage;
+    [SerializeField] ColorPicker colorPicker;
+
     private void Start()
     {
         if (distanceSlider != null)
@@ -46,6 +50,11 @@ public class BrushSetting : MonoBehaviour
         if(brushSizeSlider != null)
         {
             brushSizeSlider.onValueChanged.AddListener(delegate { ChangeBrushSize(); });
+        }
+
+        if(currentColorIndicator != null)
+        {
+            colorPicker.onColorChanged.AddListener(delegate { UpdateBrushColor(); });
         }
 
         
@@ -92,4 +101,35 @@ public class BrushSetting : MonoBehaviour
 
     }
     #endregion
+
+    #region Brush Color
+    public void ToggleColorPicker()
+    {
+        if (colorPickerImage.enabled)
+        {
+            colorPickerImage.enabled = false;
+        }
+        else
+        {
+            colorPickerImage.enabled = true;
+        }
+    }
+
+    
+    private void UpdateBrushColor()
+    {
+        currentColorIndicator.color = colorPicker.pickedColor;
+        defaultStartColor = colorPicker.pickedColor;
+        defaultEndColor = colorPicker.pickedColor;
+    }
+    #endregion
+
+    #region
+    public void ToggleBrushSet()
+    {
+
+    }
+
+    #endregion
+
 }
