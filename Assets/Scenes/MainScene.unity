@@ -2374,7 +2374,7 @@ MonoBehaviour:
   defaultEndWidth: 0.01
   defaultStartColor: {r: 1, g: 0, b: 0, a: 1}
   defaultEndColor: {r: 1, g: 0, b: 0, a: 1}
-  defaultMaterial: {fileID: 10306, guid: 0000000000000000f000000000000000, type: 0}
+  defaultMaterial: {fileID: 2100000, guid: 9a61c63efb989cf4ab0b9e2f8f42a72c, type: 2}
   defaultUseWorldSpace: 1
   distanceSlider: {fileID: 953414515}
   minDistance: 0.2
@@ -2518,11 +2518,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfcf8a3147612364a891f3a4dd419996, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  distanceFromCamera: 0.2
+  distanceFromCamera: 3
   arCam: {fileID: 1627160939}
   lineRendererPrefab: {fileID: 8279646458717712494, guid: 1bd7e4e8288ec6c4f9a351d386accb76, type: 3}
   anchorManager: {fileID: 302440969}
   brushSetting: {fileID: 1620922380}
+  updateDrawingFrames: 6
   line: {fileID: 0}
 --- !u!1 &1695044684
 GameObject:

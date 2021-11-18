@@ -13,14 +13,22 @@ public class Draw : MonoBehaviour
     [SerializeField] GameObject lineRendererPrefab;
     [SerializeField] ARAnchorManager anchorManager;
     [SerializeField] BrushSetting brushSetting;
-
+    [SerializeField] float updateDrawingFrames;
+    float frameTimer;
     public CustomLineRenderer line;
     HashSet<Vector3> points = new HashSet<Vector3>();
 
     //For Undo Function
     Stack<CustomLineRenderer> lineStack = new Stack<CustomLineRenderer>();
+
+    
+
     private void Update()
     {
+        if (frameTimer > 0)
+        {
+            frameTimer -= 1;
+        }
 #if UNITY_EDITOR
         DrawOnMouse();
 #endif
@@ -39,11 +47,20 @@ public class Draw : MonoBehaviour
             //Identify first click OR continous dragging.
             if (points.Count > 0)
             {
-                UpdateLineRenderer(mousePosition);
+                if (frameTimer < 1)
+                {
+                    UpdateLineRenderer(mousePosition);
+                    frameTimer = updateDrawingFrames;
+                }
+                else
+                {
+                    UpdateLineRenderer();
+                }
             }
             else
             {
                 InitializeLineRenderer(mousePosition);
+
             }
         }
         
@@ -83,7 +100,7 @@ public class Draw : MonoBehaviour
     {
 
         GameObject lineGO = new GameObject($"Line");
-        lineGO.transform.position = pos;
+        lineGO.transform.position = Vector3.zero;//pos;
 
         lineGO.AddComponent<ARAnchor>();
         line = lineGO.AddComponent<CustomLineRenderer>();
@@ -102,6 +119,11 @@ public class Draw : MonoBehaviour
         line.positionCount++;
         line.SetPosition(line.positionCount-1, pos);
         points.Add(pos);
+    }
+
+    void UpdateLineRenderer()
+    {
+        line.RenderPosition();
     }
 
     bool IsOverUI() {

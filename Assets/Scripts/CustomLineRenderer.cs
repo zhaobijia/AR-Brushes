@@ -32,4 +32,8 @@ public class CustomLineRenderer : MonoBehaviour
         cylinder.UpdateCylinderMesh(index, pos);
     }
 
+    public void RenderPosition()
+    {
+        cylinder.Generate();
+    }
 }
