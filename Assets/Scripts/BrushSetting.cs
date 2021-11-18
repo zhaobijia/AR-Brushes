@@ -18,9 +18,6 @@ public class BrushSetting : MonoBehaviour
     public Color defaultStartColor;
     public Color defaultEndColor;
     [Space(10)]
-    public int defaultCornerVertices;//3
-    public int defaultEndCapVertices;//5
-    public LineTextureMode defaultLineTexureMode;
     public Material defaultMaterial;
     public bool defaultUseWorldSpace;
     
@@ -61,17 +58,15 @@ public class BrushSetting : MonoBehaviour
     }
 
    
-    public void DefaultLineSetting(LineRenderer currentLine)
+    public void DefaultLineSetting(CustomLineRenderer currentLine)
     {
 
         //apply default line setting
-        currentLine.startWidth = defaultStartWidth;
-        currentLine.endWidth = defaultEndWidth;
+        currentLine.startRadius = defaultStartWidth;
+        currentLine.endRadius = defaultEndWidth;
         currentLine.startColor = defaultStartColor;
         currentLine.endColor = defaultEndColor;
-        currentLine.numCornerVertices = defaultCornerVertices;
-        currentLine.numCapVertices = defaultEndCapVertices;
-        currentLine.textureMode = defaultLineTexureMode;
+
         currentLine.material = defaultMaterial;
         currentLine.useWorldSpace = defaultUseWorldSpace;
 

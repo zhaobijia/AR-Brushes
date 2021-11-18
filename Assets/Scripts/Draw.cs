@@ -14,11 +14,11 @@ public class Draw : MonoBehaviour
     [SerializeField] ARAnchorManager anchorManager;
     [SerializeField] BrushSetting brushSetting;
 
-    public LineRenderer line;
+    public CustomLineRenderer line;
     HashSet<Vector3> points = new HashSet<Vector3>();
 
     //For Undo Function
-    Stack<LineRenderer> lineStack = new Stack<LineRenderer>();
+    Stack<CustomLineRenderer> lineStack = new Stack<CustomLineRenderer>();
     private void Update()
     {
 #if UNITY_EDITOR
@@ -81,23 +81,24 @@ public class Draw : MonoBehaviour
 
     void InitializeLineRenderer(Vector3 pos)
     {
+
         GameObject lineGO = new GameObject($"Line");
-       // GameObject lineGO= Instantiate(lineRendererPrefab, pos,Quaternion.identity);
         lineGO.transform.position = pos;
 
         lineGO.AddComponent<ARAnchor>();
-        line = lineGO.AddComponent<LineRenderer>();
+        line = lineGO.AddComponent<CustomLineRenderer>();
         lineStack.Push(line);
 
 
         brushSetting.DefaultLineSetting(line);
 
         line.SetPosition(0, pos);
-        line.SetPosition(1, pos);
+        //line.SetPosition(1, pos);
         points.Add(pos);
     }
     void UpdateLineRenderer(Vector3 pos)
     {
+ 
         line.positionCount++;
         line.SetPosition(line.positionCount-1, pos);
         points.Add(pos);
@@ -111,7 +112,7 @@ public class Draw : MonoBehaviour
     {
         if (lineStack.Count > 0)
         {
-            LineRenderer lineToDelete = lineStack.Peek();
+            CustomLineRenderer lineToDelete = lineStack.Peek();
             lineStack.Pop();
             Destroy(lineToDelete.gameObject);
         }

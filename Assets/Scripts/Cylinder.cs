@@ -1,103 +1,150 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
 public class Cylinder : MonoBehaviour
 {
-    public Vector3 center;
-    public int radius;
-    public int split_count;
-    public int height;
-    public int edge;
+    public List<Vector3> centerPos;
+    public float radius = 0.1f;
+    public int split_count = 10;
 
+
+    private int height = 0;
     private Mesh mesh;
-    private Vector3[] vertices;
-    private Vector3[] normals;
+    private List<Vector3> vertices;
+    private List<Vector3> normals;
 
-    private void Awake()
+
+    /// <summary>
+    /// Update this Mesh for new add-in points 
+    /// Generate new Mesh if no mesh yet
+    /// </summary>
+    /// <param name="newCenterIndex"></param>
+    /// <param name="newCenterPos"></param>
+    public void UpdateCylinderMesh(int newCenterIndex, Vector3 newCenterPos)
     {
-        Generate();
+        if (height < 1)
+        {
+            InitializeCylinder();
+
+            centerPos = new List<Vector3>();
+            centerPos.Add(newCenterPos);
+            vertices = new List<Vector3>();
+            normals = new List<Vector3>();
+            height = 1;
+
+        }
+        else
+        {
+
+            //center pos >2
+            centerPos.Add(newCenterPos);
+            height = centerPos.Count;
+            Generate();
+
+        }
     }
 
-    private void Generate()
+    private void InitializeCylinder()
     {
         GetComponent<MeshFilter>().mesh = mesh = new Mesh();
         mesh.name = "Procedural Cylinder";
-
+        
+    }
+    private void Generate()
+    {
         GenerateVertices();
         GenerateTriangles();
 
     }
 
-    private void GenerateVertices() 
+    private void GenerateVertices()
     {
-        //+2 are starting and ending points
-        vertices = new Vector3[split_count * (height + 1) + 2];
-        normals = new Vector3[split_count * (height + 1) + 2];
-        int v = 0,n = 0;
-        //starting point
-        vertices[v++] = center - Vector3.up*edge;
-        normals[n++] = Vector3.down;
+        
+        vertices.Clear();
+        normals.Clear();
+        int v = 0;
 
-        for (int h = 0; h <= height; h++)
+        //starting point
+        vertices.Add(centerPos[0]);
+        v++;
+        normals.Add((centerPos[1] - centerPos[0]).normalized);
+
+
+        //middle
+        for (int h = 1; h < height - 1; h++)
         {
-            for(int r = 0; r <split_count; r++)
+            for (int r = 0; r < split_count; r++)
             {
                 //where this circle of vertices is set depends on the center,outer loop can be cut off when connecting to runtime drawing
-                vertices[v++] = CRCoordinateToXYZCoordinate(center + Vector3.up*h, Vector3.up, radius, split_count, r);
+                vertices.Add(CRCoordinateToXYZCoordinate(centerPos[h], centerPos[h] - centerPos[h - 1], radius, split_count, r));
+                v++;
+
+                normals.Add((vertices[v-1] - centerPos[h]).normalized);
                 
-                normals[n++] = (vertices[v - 1] - (center + Vector3.up * h)).normalized;
             }
         }
 
-        vertices[v++] = center + (Vector3.up * height) + Vector3.up * edge;
-        normals[n++] = Vector3.up;
-        
-        mesh.vertices = vertices;
-        mesh.normals = normals;
+        vertices.Add(centerPos[height - 1]);
+        normals.Add(centerPos[height - 2] - centerPos[height - 1]);
+
+        mesh.vertices = vertices.ToArray();
+        mesh.normals = normals.ToArray();
+
+
     }
 
 
-    private void GenerateTriangles() 
+    private void GenerateTriangles()
     {
         //+1 is starting and ending parts added together
-        int triangle_number = split_count * 2 * (height+1);
-        int[] triangles = new int[triangle_number*3 ];
+        int triangle_number = split_count * 2 * (height);
+        int[] triangles = new int[triangle_number * 3];
 
 
         //head:
         int hd = 0, tri = 0, h_v = 1;
-        while(hd < split_count-1)
+        while (hd < split_count - 1)
         {
             tri = SetTriangle(triangles, tri, 0, h_v, h_v + 1);
             hd++;
             h_v++;
         }
         tri = SetTriangle(triangles, tri, 0, h_v, 1);
-
-        int h = 0,  v=1;
-        while (h < height)
+        
+        int h = 0, v = 1;
+        while (h < height-2)
         {
             int q = 0;
-            while(q < split_count-1)
+            while (q < split_count - 1)
             {
                 tri = SetQuad(triangles, tri, v, v + split_count, v + 1, v + 1 + split_count);
                 q++;
                 v++;
             }
             //out of the loop, connect the last vertex of this level to the orgin (level below)'s starting vertex
+            
             tri = SetQuad(triangles, tri, v, v + split_count, v - split_count + 1, v + 1);
-            v++;
+            
+            //v++;
+            
             h++;
+            
         }
-
+        /*
         int tl = 0, t_v = 0;
-        while(tl < split_count-1)
+        while (tl < split_count - 1)
         {
-            tri = SetTriangle(triangles, tri, v + t_v, v+split_count, v + 1 + t_v);
+            tri = SetTriangle(triangles, tri, v + t_v, v + split_count, v + 1 + t_v);
             tl++;
             t_v++;
         }
         tri = SetTriangle(triangles, tri, v + t_v, v + split_count, v);
+        */
+        Debug.Log(triangles.Length);
+        Debug.Log(tri);
+
         mesh.triangles = triangles;
     }
 
@@ -110,14 +157,15 @@ public class Cylinder : MonoBehaviour
     /// <param name="count">count of sector for the circle</param>
     /// <param name="i">index of sector</param>
     /// <returns></returns>
-    private Vector3 CRCoordinateToXYZCoordinate(Vector3 center, Vector3 dir, int radius, int count, int i) {
+    private Vector3 CRCoordinateToXYZCoordinate(Vector3 center, Vector3 dir, float radius, int count, int i)
+    {
 
         Quaternion qua = Quaternion.FromToRotation(Vector3.up, dir);
         Vector3 v00_dir = qua * Vector3.right; //Direction from center to vertex, for angle at 0;
-        float angle = -i*(360 / count);
-        Vector3 i_dir = Quaternion.AngleAxis(angle, dir)*v00_dir;
+        float angle = -i * (360 / count);
+        Vector3 i_dir = Quaternion.AngleAxis(angle, dir) * v00_dir;
 
-        Vector3 pos = center + i_dir *radius;
+        Vector3 pos = center + i_dir * radius;
         return pos;
     }
 
@@ -156,13 +204,13 @@ public class Cylinder : MonoBehaviour
             return;
         }
 
-        for (int i = 0; i < vertices.Length; i++)
+        for (int i = 0; i < vertices.Count; i++)
         {
             Gizmos.color = Color.black;
-            Gizmos.DrawSphere(vertices[i], 0.1f);
+            Gizmos.DrawSphere(vertices[i], 0.01f);
 
             Gizmos.color = Color.yellow;
-            Gizmos.DrawRay(vertices[i], normals[i]);
+            Gizmos.DrawRay(vertices[i], normals[i]*0.1f);
         }
     }
 }
