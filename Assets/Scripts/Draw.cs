@@ -41,6 +41,10 @@ public class Draw : MonoBehaviour
     {
         if (Input.GetMouseButton(0) && !IsOverUI())
         {
+            if (brushSetting.settingIsOn)
+            {
+                brushSetting.ToggleColorPicker();
+            }
             Vector3 mousePosition = arCam.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, distanceFromCamera));
             //check mouse position not on top of UI
 
@@ -149,6 +153,7 @@ public class Draw : MonoBehaviour
 
     public void SetDistanceFromCamera(float dist)
     {
+        Debug.Log("?");
         distanceFromCamera = dist;
     }
 

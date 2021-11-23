@@ -8,13 +8,13 @@ using UnityEngine.UI;
 
 public class BrushSetting : MonoBehaviour
 {
-
+    public bool settingIsOn;
     [SerializeField] Draw draw;
 
     [Header("Default Line Renderer Setting:")]
     //default settings:
-    public float lineWidth = 0.5f;
-    public Color lineColor = Color.white;
+    public float lineWidth;
+    public Color lineColor;
     [Space(10)]
     public Material lineMaterial;
   //  public bool defaultUseWorldSpace;
@@ -24,12 +24,12 @@ public class BrushSetting : MonoBehaviour
     [Header("Line Renderer Setting UI:")]
     [SerializeField] Slider distanceSlider;
     
-    [SerializeField] float minDistance = 0.1f;
-    [SerializeField] float maxDistance = 10f;
+    [SerializeField] float minDistance;
+    [SerializeField] float maxDistance;
 
     [SerializeField] Slider brushSizeSlider;
-    [SerializeField] float minSize = 1f;
-    [SerializeField] float maxSize = 10f;
+    [SerializeField] float minSize;
+    [SerializeField] float maxSize;
 
     [SerializeField] Image currentColorIndicator;
     [SerializeField] Image colorPickerImage;
@@ -39,16 +39,18 @@ public class BrushSetting : MonoBehaviour
     {
         if (distanceSlider != null)
         {
-            distanceSlider.onValueChanged.AddListener(delegate { ChangeDrawDistance(); });
             distanceSlider.maxValue = maxDistance;
             distanceSlider.minValue = minDistance;
+            distanceSlider.onValueChanged.AddListener(delegate { ChangeDrawDistance(); });
+            
         }
 
         if(brushSizeSlider != null)
         {
-            brushSizeSlider.onValueChanged.AddListener(delegate { ChangeBrushSize(); });
             brushSizeSlider.maxValue = maxSize;
             brushSizeSlider.minValue = minSize;
+            brushSizeSlider.onValueChanged.AddListener(delegate { ChangeBrushSize(); });
+            
         }
 
         if(currentColorIndicator != null)
@@ -63,7 +65,6 @@ public class BrushSetting : MonoBehaviour
     public void LineSetting(CustomLineRenderer currentLine)
     {
 
-        //apply default line setting
         currentLine.radius = lineWidth;
         currentLine.color = lineColor;
         currentLine.material = lineMaterial;
@@ -75,10 +76,7 @@ public class BrushSetting : MonoBehaviour
     #region Spawn Distance from Camera
     private void ChangeDrawDistance()
     {
-
-        //distance range from 0.2 to 1.5
         float dist = distanceSlider.value;
-
         draw.SetDistanceFromCamera(dist);
     }
     #endregion
@@ -94,13 +92,16 @@ public class BrushSetting : MonoBehaviour
     #region Brush Color
     public void ToggleColorPicker()
     {
+        
         if (colorPickerImage.enabled)
         {
             colorPickerImage.enabled = false;
+            settingIsOn = false;
         }
         else
         {
             colorPickerImage.enabled = true;
+            settingIsOn = true;
         }
     }
 
