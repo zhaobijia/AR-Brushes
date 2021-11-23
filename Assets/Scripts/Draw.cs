@@ -84,10 +84,18 @@ public class Draw : MonoBehaviour
                     InitializeLineRenderer(touchPosition);
                     break;
                 case TouchPhase.Moved:
-                    UpdateLineRenderer(touchPosition);
+                    if (frameTimer < 1)
+                    {
+                        UpdateLineRenderer(touchPosition);
+                        frameTimer = updateDrawingFrames;
+                    }
+                    else
+                    {
+                        UpdateLineRenderer();
+                    }
                     break;
                 case TouchPhase.Stationary:
-                    UpdateLineRenderer(touchPosition);
+                    UpdateLineRenderer();
                     break;
                 case TouchPhase.Ended:
                     break;
@@ -107,17 +115,16 @@ public class Draw : MonoBehaviour
         lineStack.Push(line);
 
 
-        brushSetting.DefaultLineSetting(line);
+        brushSetting.LineSetting(line);
 
-        line.SetPosition(0, pos);
+        line.InitializeRenderer(pos);
         //line.SetPosition(1, pos);
         points.Add(pos);
     }
     void UpdateLineRenderer(Vector3 pos)
     {
- 
-        line.positionCount++;
-        line.SetPosition(line.positionCount-1, pos);
+
+        line.SetPosition(pos);
         points.Add(pos);
     }
 

@@ -13,25 +13,23 @@ public class BrushSetting : MonoBehaviour
 
     [Header("Default Line Renderer Setting:")]
     //default settings:
-    public float defaultStartWidth;
-    public float defaultEndWidth;
-    public Color defaultStartColor;
-    public Color defaultEndColor;
+    public float lineWidth = 0.5f;
+    public Color lineColor = Color.white;
     [Space(10)]
-    public Material defaultMaterial;
-    public bool defaultUseWorldSpace;
+    public Material lineMaterial;
+  //  public bool defaultUseWorldSpace;
     
     [Space(10)]
 
     [Header("Line Renderer Setting UI:")]
     [SerializeField] Slider distanceSlider;
     
-    [SerializeField] float minDistance = 0.2f;
-    [SerializeField] float maxDistance = 1.5f;
+    [SerializeField] float minDistance = 0.1f;
+    [SerializeField] float maxDistance = 10f;
 
     [SerializeField] Slider brushSizeSlider;
-    [SerializeField] float minSize = 0.01f;
-    [SerializeField] float maxSize = 1f;
+    [SerializeField] float minSize = 1f;
+    [SerializeField] float maxSize = 10f;
 
     [SerializeField] Image currentColorIndicator;
     [SerializeField] Image colorPickerImage;
@@ -42,11 +40,15 @@ public class BrushSetting : MonoBehaviour
         if (distanceSlider != null)
         {
             distanceSlider.onValueChanged.AddListener(delegate { ChangeDrawDistance(); });
+            distanceSlider.maxValue = maxDistance;
+            distanceSlider.minValue = minDistance;
         }
 
         if(brushSizeSlider != null)
         {
             brushSizeSlider.onValueChanged.AddListener(delegate { ChangeBrushSize(); });
+            brushSizeSlider.maxValue = maxSize;
+            brushSizeSlider.minValue = minSize;
         }
 
         if(currentColorIndicator != null)
@@ -58,17 +60,13 @@ public class BrushSetting : MonoBehaviour
     }
 
    
-    public void DefaultLineSetting(CustomLineRenderer currentLine)
+    public void LineSetting(CustomLineRenderer currentLine)
     {
 
         //apply default line setting
-        currentLine.startRadius = defaultStartWidth;
-        currentLine.endRadius = defaultEndWidth;
-        currentLine.startColor = defaultStartColor;
-        currentLine.endColor = defaultEndColor;
-
-        currentLine.material = defaultMaterial;
-        currentLine.useWorldSpace = defaultUseWorldSpace;
+        currentLine.radius = lineWidth;
+        currentLine.color = lineColor;
+        currentLine.material = lineMaterial;
 
     }
 
@@ -77,10 +75,9 @@ public class BrushSetting : MonoBehaviour
     #region Spawn Distance from Camera
     private void ChangeDrawDistance()
     {
-        float sliderValue = distanceSlider.value;
-        
+
         //distance range from 0.2 to 1.5
-        float dist = minDistance + (maxDistance - minDistance) * sliderValue;
+        float dist = distanceSlider.value;
 
         draw.SetDistanceFromCamera(dist);
     }
@@ -89,11 +86,8 @@ public class BrushSetting : MonoBehaviour
     #region Brush Size
     private void ChangeBrushSize()
     {
-        float sliderValue = brushSizeSlider.value;
-        float size = minSize + (maxSize - minSize) * sliderValue;
-        defaultStartWidth = size;
-        defaultEndWidth = size;
-
+        lineWidth = brushSizeSlider.value;
+ 
     }
     #endregion
 
@@ -114,8 +108,8 @@ public class BrushSetting : MonoBehaviour
     private void UpdateBrushColor()
     {
         currentColorIndicator.color = colorPicker.pickedColor;
-        defaultStartColor = colorPicker.pickedColor;
-        defaultEndColor = colorPicker.pickedColor;
+        lineColor = colorPicker.pickedColor;
+        
     }
     #endregion
 

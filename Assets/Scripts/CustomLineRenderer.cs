@@ -4,14 +4,10 @@ using UnityEngine;
 
 public class CustomLineRenderer : MonoBehaviour
 {
-    public float startRadius;
-    public float endRadius;
-    public Color startColor;
-    public Color endColor;
-    public Material material;
-    public bool useWorldSpace;
-
-    public int positionCount;
+    [HideInInspector] public float radius;
+    [HideInInspector] public Color color = Color.white;
+    [HideInInspector] public Material material;
+    [HideInInspector] public int positionCount;
 
     public Cylinder cylinder;
 
@@ -21,15 +17,20 @@ public class CustomLineRenderer : MonoBehaviour
         GetComponent<MeshRenderer>().materials[0] = material;
     }
 
+    public void InitializeRenderer(Vector3 pos)
+    {
+        cylinder.InitializeCylinder(pos, radius, color, material);
+    }
+
     /// <summary>
     /// Set cylinder center positions
     /// </summary>
     /// <param name="index">cylinder center position index</param>
     /// <param name="pos">cylinder center position vector</param>
-    public void SetPosition(int index, Vector3 pos)
+    public void SetPosition(Vector3 pos)
     {
 
-        cylinder.UpdateCylinderMesh(index, pos);
+        cylinder.UpdateCylinderMesh(pos);
     }
 
     public void RenderPosition()

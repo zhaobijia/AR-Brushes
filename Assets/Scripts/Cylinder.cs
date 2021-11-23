@@ -8,7 +8,9 @@ public class Cylinder : MonoBehaviour
     public List<Vector3> centerPos;
     public float radius = 0.1f;
     public int split_count = 10;
-
+    public Color color;
+    public Material material;
+    public int positionCount;
 
     private int height = 0;
     private Mesh mesh;
@@ -16,41 +18,36 @@ public class Cylinder : MonoBehaviour
     private Vector3[] normals;
 
 
+    
+
     /// <summary>
     /// Update this Mesh for new add-in points 
     /// Generate new Mesh if no mesh yet
     /// </summary>
     /// <param name="newCenterIndex"></param>
     /// <param name="newCenterPos"></param>
-    public void UpdateCylinderMesh(int newCenterIndex, Vector3 newCenterPos)
+    public void UpdateCylinderMesh(Vector3 newCenterPos)
     {
-        if (height < 1)
-        {
-            InitializeCylinder();
 
-            centerPos = new List<Vector3>();
-            centerPos.Add(newCenterPos);
-            //vertices = new List<Vector3>();
-            //normals = new List<Vector3>();
-            height = 1;
-
-        }
-        else
-        {
-
-            //center pos >2
-            centerPos.Add(newCenterPos);
-            height = centerPos.Count;
-            Generate();
-
-        }
+         centerPos.Add(newCenterPos);
+         height = centerPos.Count;
+         Generate();        
     }
 
-    private void InitializeCylinder()
+    public void InitializeCylinder(Vector3 newCenterPos, float _radius, Color color, Material material)
     {
         GetComponent<MeshFilter>().mesh = mesh = new Mesh();
         mesh.name = "Procedural Cylinder";
-        
+        //?
+        MeshRenderer renderer = GetComponent<MeshRenderer>();
+        renderer.material = material;
+        renderer.material.color = color;
+        radius = _radius;
+
+        centerPos = new List<Vector3>();
+        centerPos.Add(newCenterPos);
+        height = 1;
+
     }
     public void Generate()
     {
