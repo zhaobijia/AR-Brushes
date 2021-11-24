@@ -18,9 +18,7 @@ public class Draw : MonoBehaviour
     public CustomLineRenderer line;
     HashSet<Vector3> points = new HashSet<Vector3>();
 
-    //For Undo Function
-    Stack<CustomLineRenderer> lineStack = new Stack<CustomLineRenderer>();
-
+    public InteractionManager interactionManager;
     
 
     private void Update()
@@ -44,6 +42,7 @@ public class Draw : MonoBehaviour
             if (brushSetting.settingIsOn)
             {
                 brushSetting.ToggleColorPicker();
+
             }
             Vector3 mousePosition = arCam.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, distanceFromCamera));
             //check mouse position not on top of UI
@@ -116,7 +115,7 @@ public class Draw : MonoBehaviour
 
         lineGO.AddComponent<ARAnchor>();
         line = lineGO.AddComponent<CustomLineRenderer>();
-        lineStack.Push(line);
+        interactionManager.StoreInteraction(lineGO);
 
 
         brushSetting.LineSetting(line);
@@ -141,19 +140,9 @@ public class Draw : MonoBehaviour
         return EventSystem.current.IsPointerOverGameObject();
     }
 
-    public void UndoDrawing()
-    {
-        if (lineStack.Count > 0)
-        {
-            CustomLineRenderer lineToDelete = lineStack.Peek();
-            lineStack.Pop();
-            Destroy(lineToDelete.gameObject);
-        }
-    }
 
     public void SetDistanceFromCamera(float dist)
     {
-        Debug.Log("?");
         distanceFromCamera = dist;
     }
 

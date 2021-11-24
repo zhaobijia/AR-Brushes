@@ -35,6 +35,9 @@ public class BrushSetting : MonoBehaviour
     [SerializeField] Image colorPickerImage;
     [SerializeField] ColorPicker colorPicker;
 
+    [SerializeField] GameObject brushSetGO;
+    bool brushPanelIsOn;
+
     private void Start()
     {
         if (distanceSlider != null)
@@ -117,7 +120,16 @@ public class BrushSetting : MonoBehaviour
     #region
     public void ToggleBrushSet()
     {
-
+        if (brushPanelIsOn)
+        {
+            brushSetGO.SetActive(false);
+            brushPanelIsOn = false;
+        }
+        else
+        {
+            brushSetGO.SetActive(true);
+            brushPanelIsOn = true;
+        }
     }
 
     #endregion
