@@ -4,7 +4,7 @@
 //imgs here
 1. Capsule mesh approach.
     This demo generates pipe-shaped 3D mesh in runtime
-    [!mesh generate img](/demoImgs/mesh_gen.gif)
+    [!mesh generate img](https://github.com/zhaobijia/AR-Brushes/blob/main/demoImgs/mesh_gen.gif)
 2. Color Picker Shader.
     Color picker is achieved by customed color picker shader
     //gif here
