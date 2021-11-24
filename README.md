@@ -10,7 +10,20 @@
     ![color picker gif](demoImgs/colorpick_demo.gif)
 3. **Change Brushes**
     - Custom materials can be applied as brushes' style. <br />
+    - Unity Default Material (Glossy) <br />
+    ![custom brushes/ Unity Default Glossy]()
+    - Unity Default Material (Diffuse) <br />
+    ![custom brushes/ Unity Default Diffuse]()
+    - Unity Default Material (Sprite)<br />
+    ![custom brushes/ Unity Default Sprite]()
+    - Custom Material <br \>
+    ![custom brushes/ Custom Material]()
     
-    ![custom brushes]()
+###### TODOs in the near future:
+1. Adding more materials to try out different brush styles.  <br />
+2. Optimize mesh generatign speed on android build (slower than editor mode).  <br />
+3. Fix undo function bug on android build.  <br />
+
+    
 
 
