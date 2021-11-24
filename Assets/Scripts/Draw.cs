@@ -18,8 +18,8 @@ public class Draw : MonoBehaviour
     public CustomLineRenderer line;
     HashSet<Vector3> points = new HashSet<Vector3>();
 
-    public InteractionManager interactionManager;
-    
+    //public InteractionManager interactionManager;
+    Stack<CustomLineRenderer> lineStack = new Stack<CustomLineRenderer>();
 
     private void Update()
     {
@@ -115,8 +115,8 @@ public class Draw : MonoBehaviour
 
         lineGO.AddComponent<ARAnchor>();
         line = lineGO.AddComponent<CustomLineRenderer>();
-        interactionManager.StoreInteraction(lineGO);
-
+        //interactionManager.StoreInteraction(lineGO);
+        lineStack.Push(line);
 
         brushSetting.LineSetting(line);
 
@@ -144,6 +144,17 @@ public class Draw : MonoBehaviour
     public void SetDistanceFromCamera(float dist)
     {
         distanceFromCamera = dist;
+    }
+
+    public void Undo()
+    {
+        if (lineStack.Count > 0)
+        {
+            
+            CustomLineRenderer line = lineStack.Pop();
+            line.GetComponent<MeshRenderer>().enabled = false;
+            Destroy(line.gameObject);
+        }
     }
 
 

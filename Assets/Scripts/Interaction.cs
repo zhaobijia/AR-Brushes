@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Interaction
@@ -12,6 +10,7 @@ public class Interaction
     }
     public void Undo()
     {
-        Object.Destroy(interactionGo);
+        interactionGo.SetActive(false);
+        GameObject.Destroy(interactionGo);
     }
 }

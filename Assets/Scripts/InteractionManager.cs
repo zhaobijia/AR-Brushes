@@ -4,12 +4,9 @@ using UnityEngine;
 
 public class InteractionManager : MonoBehaviour
 {
-    public Stack<Interaction> interactionStack;
+    public Stack<Interaction> interactionStack = new Stack<Interaction>();
 
-    private void Start()
-    {
-        interactionStack = new Stack<Interaction>();
-    }
+
     public void UndoInteraction()
     {
         if (interactionStack.Count > 0)
