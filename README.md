@@ -3,13 +3,13 @@
 ###### Features:
 //demo imgs here
 1. **Capsule mesh approach**
-    - This demo generates pipe-shaped 3D mesh in runtime
+    - This demo generates pipe-shaped 3D mesh in runtime <br />
     ![mesh generate gif](demoImgs/mesh_gen.gif)
 2. **Color Picker Shader.**
-    - Color picker is achieved by customed color picker shader
+    - Color picker is achieved by customed color picker shader <br />
     ![color picker gif](demoImgs/colorpick_demo.gif)
 3. **Change Brushes**
-    - Custom materials can be applied as brushes' style.
+    - Custom materials can be applied as brushes' style. <br />
     
     ![custom brushes]()
 
