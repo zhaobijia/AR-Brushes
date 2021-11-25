@@ -17,7 +17,7 @@
     ![custom brushes/ Unity Default Diffuse](demoImgs/diffusemat_demo.gif)
     - Unity Default Material (Sprite)<br />
     ![custom brushes/ Unity Default Sprite](demoImgs/spritemat_demo.gif)
-    - Custom Material <br \>
+    - Custom Material <br />
     ![custom brushes/ Custom Material](demoImgs/customshader.gif)
     
 ###### TODOs in the near future:
