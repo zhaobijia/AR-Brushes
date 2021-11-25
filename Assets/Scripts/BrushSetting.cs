@@ -71,6 +71,7 @@ public class BrushSetting : MonoBehaviour
         currentLine.radius = lineWidth;
         currentLine.color = lineColor;
         currentLine.material = lineMaterial;
+        currentLine.material.shader = lineMaterial.shader;
 
     }
 

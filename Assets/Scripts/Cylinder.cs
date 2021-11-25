@@ -16,6 +16,7 @@ public class Cylinder : MonoBehaviour
     private Mesh mesh;
     private Vector3[] vertices;
     private Vector3[] normals;
+    private Vector2[] uvs;
 
 
     
@@ -38,10 +39,14 @@ public class Cylinder : MonoBehaviour
     {
         GetComponent<MeshFilter>().mesh = mesh = new Mesh();
         mesh.name = "Procedural Cylinder";
+        
         //?
         MeshRenderer renderer = GetComponent<MeshRenderer>();
         renderer.material = material;
         renderer.material.color = color;
+        
+
+
         radius = _radius;
 
         centerPos = new List<Vector3>();
@@ -61,11 +66,14 @@ public class Cylinder : MonoBehaviour
 
         vertices = new Vector3[1 + (height - 2) * split_count + 1];
         normals = new Vector3[1 + (height - 2) * split_count + 1];
-        int v = 0, n =0;
+        uvs = new Vector2[vertices.Length];
 
+        int v = 0, n =0;
+        int u = 0;
         //starting point
         vertices[v++]= (centerPos[0]);
         normals[n++]=((centerPos[1] - centerPos[0]).normalized);
+        uvs[u++] = Vector2.zero;
         //middle
         for (int h = 1; h < height - 1; h++)
         {
@@ -73,8 +81,7 @@ public class Cylinder : MonoBehaviour
             {
                 //where this circle of vertices is set depends on the center,outer loop can be cut off when connecting to runtime drawing
                 vertices[v++] = (CRCoordinateToXYZCoordinate(centerPos[h], centerPos[h] - centerPos[h - 1], radius, split_count, r));
- 
-
+                uvs[u++] = ConvertTextureToUVCoordinates(r, h, split_count, height);
                 normals[n++] = ((vertices[v-1] - centerPos[h]).normalized);
                 
             }
@@ -85,7 +92,10 @@ public class Cylinder : MonoBehaviour
 
         mesh.vertices = vertices;
         mesh.normals = normals;
+        mesh.uv = uvs;
+
     }
+
 
 
     private void GenerateTriangles()
@@ -181,6 +191,17 @@ public class Cylinder : MonoBehaviour
         return pos;
     }
 
+
+    private Vector2 ConvertTextureToUVCoordinates(int x, int y, int width, int height)
+    {
+        Vector2 result;
+
+        float x_ = x * (1 /(float)width);
+        float y_ = y * (1 / (float)height);
+        result = new Vector2(x_, y_);
+        return result;
+    }
+
     /// <summary>
     /// Draw Quad base on 4 vertices
     /// </summary>
@@ -207,6 +228,8 @@ public class Cylinder : MonoBehaviour
         triangles[i + 2] = v10;
         return i + 3;
     }
+
+
 
     private void OnDrawGizmos()
     {

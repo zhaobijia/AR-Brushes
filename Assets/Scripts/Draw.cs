@@ -19,7 +19,7 @@ public class Draw : MonoBehaviour
     HashSet<Vector3> points = new HashSet<Vector3>();
 
     //public InteractionManager interactionManager;
-    Stack<CustomLineRenderer> lineStack = new Stack<CustomLineRenderer>();
+    public Stack<CustomLineRenderer> lineStack = new Stack<CustomLineRenderer>();
 
     private void Update()
     {
@@ -76,33 +76,39 @@ public class Draw : MonoBehaviour
 
     private void DrawOnTouch()
     {
-        if (Input.touchCount > 0 && !IsOverUI())
+        if (Input.touchCount > 0)
         {
             Touch touch = Input.GetTouch(0);
-            Vector3 touchPosition = arCam.ScreenToWorldPoint(new Vector3(touch.position.x, touch.position.y, distanceFromCamera));
+            int id = touch.fingerId;
 
-            switch (touch.phase)
+            if (!EventSystem.current.IsPointerOverGameObject(id))
             {
-                case TouchPhase.Began:
-                    InitializeLineRenderer(touchPosition);
-                    break;
-                case TouchPhase.Moved:
-                    if (frameTimer < 1)
-                    {
-                        UpdateLineRenderer(touchPosition);
-                        frameTimer = updateDrawingFrames;
-                    }
-                    else
-                    {
-                        UpdateLineRenderer();
-                    }
-                    break;
-                case TouchPhase.Stationary:
-                    UpdateLineRenderer();
-                    break;
-                case TouchPhase.Ended:
-                    break;
 
+                Vector3 touchPosition = arCam.ScreenToWorldPoint(new Vector3(touch.position.x, touch.position.y, distanceFromCamera));
+
+                switch (touch.phase)
+                {
+                    case TouchPhase.Began:
+                        InitializeLineRenderer(touchPosition);
+                        break;
+                    case TouchPhase.Moved:
+                        if (frameTimer < 1)
+                        {
+                            UpdateLineRenderer(touchPosition);
+                            frameTimer = updateDrawingFrames;
+                        }
+                        else
+                        {
+                            UpdateLineRenderer();
+                        }
+                        break;
+                    case TouchPhase.Stationary:
+                        UpdateLineRenderer();
+                        break;
+                    case TouchPhase.Ended:
+                        break;
+
+                }
             }
         }
     }

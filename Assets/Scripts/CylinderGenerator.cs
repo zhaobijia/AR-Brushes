@@ -57,7 +57,7 @@ public class CylinderGenerator : MonoBehaviour
  
  
         vertices[vertices.Length - 1] = new Vector3(0, 0, vertices[vertices.Length - 3].z);
-        Debug.Log("Vertices: " + num);
+
         mesh.vertices = vertices;
         MakingNormals();
     }
