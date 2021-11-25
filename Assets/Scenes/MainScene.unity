@@ -930,7 +930,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 10302, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2575,7 +2575,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2748cf2c13bd6d4ca74d0487ded5ba7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  brushMaterial: {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  brushMaterial: {fileID: 2100000, guid: cde4391a70b25774ba65ed8218709c0b, type: 2}
 --- !u!114 &1556710974
 MonoBehaviour:
   m_ObjectHideFlags: 0
