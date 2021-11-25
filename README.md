@@ -18,7 +18,7 @@
     - Unity Default Material (Sprite)<br />
     ![custom brushes/ Unity Default Sprite](demoImgs/spritemat_demo.gif)
     - Custom Material <br />
-    ![custom brushes/ Custom Material](demoImgs/customshader.gif)
+    ![custom brushes/ Custom Material](demoImgs/customshader_demo.gif)
     
 ###### TODOs in the near future:
 1. Adding more materials to try out different brush styles.  <br />
